@@ -1,0 +1,72 @@
+trigger:
+  branches:
+    include:
+      - "*"
+
+pr:
+  branches:
+    include:
+      - "*"
+
+pool:
+  vmImage: "windows-latest"
+
+variables:
+  npm_config_cache: "$(Pipeline.Workspace)\\.npm"
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "20.x"
+    displayName: "Use Node.js 20"
+
+  - task: Cache@2
+    displayName: "Cache npm"
+    inputs:
+      key: 'npm | "$(Agent.OS)" | package-lock.json'
+      restoreKeys: |
+        npm | "$(Agent.OS)"
+      path: "$(npm_config_cache)"
+
+  - script: npm ci
+    displayName: "Install dependencies"
+
+  - script: npx playwright install
+    displayName: "Install Playwright browsers"
+
+  - script: npx bddgen
+    displayName: "Generate BDD tests"
+
+  - script: npm run lint
+    displayName: "Lint"
+
+  - script: npm run typecheck
+    displayName: "Typecheck"
+
+  - script: npm run test:smoke
+    displayName: "Run smoke tests (Chrome)"
+
+  - task: PublishPipelineArtifact@1
+    displayName: "Publish Playwright HTML report"
+    condition: always()
+    inputs:
+      targetPath: "playwright-report"
+      artifact: "playwright-report"
+      publishLocation: "pipeline"
+
+  - task: PublishPipelineArtifact@1
+    displayName: "Publish Allure results"
+    condition: always()
+    inputs:
+      targetPath: "allure-results"
+      artifact: "allure-results"
+      publishLocation: "pipeline"
+
+  - task: PublishPipelineArtifact@1
+    displayName: "Publish Cucumber report"
+    condition: always()
+    inputs:
+      targetPath: "cucumber-report"
+      artifact: "cucumber-report"
+      publishLocation: "pipeline"
+

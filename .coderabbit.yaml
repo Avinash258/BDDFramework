@@ -1,0 +1,19 @@
+language: en
+
+reviews:
+  high_level_summary: true
+  review_status: true
+  poem: false
+
+  path_filters:
+    - "!node_modules/**"
+    - "!dist/**"
+    - "!playwright-report/**"
+    - "!allure-results/**"
+    - "!test-results/**"
+    - "!tests/generated/**"
+    - "!cucumber-report/**"
+
+  auto_review:
+    enabled: true
+

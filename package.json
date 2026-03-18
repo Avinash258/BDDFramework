@@ -1,0 +1,33 @@
+{
+  "name": "bbdframework",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "bddgen": "bddgen",
+    "test": "npm run bddgen && playwright test",
+    "test:chrome": "npm run bddgen && playwright test --project=chromium",
+    "test:smoke": "npm run bddgen && playwright test --grep \"@smoke\" --project=chromium",
+    "test:regression": "npm run bddgen && playwright test --grep \"@regression\" --project=chromium",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.58.2",
+    "allure-playwright": "^3.6.0",
+    "eslint": "^10.0.3",
+    "eslint-plugin-playwright": "^2.10.0",
+    "globals": "^17.4.0",
+    "jiti": "^2.6.1",
+    "playwright-bdd": "^8.5.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.57.1"
+  }
+}
