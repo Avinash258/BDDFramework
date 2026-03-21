@@ -14,11 +14,13 @@ steps:
 
 - checkout: self
 
+# Install Node
 - task: NodeTool@0
   inputs:
     versionSpec: "20.x"
   displayName: "Use Node.js"
 
+# Cache npm packages
 - task: Cache@2
   inputs:
     key: 'npm | "$(Agent.OS)" | package-lock.json'
@@ -27,12 +29,15 @@ steps:
     path: $(npm_config_cache)
   displayName: "Cache npm"
 
+# Install dependencies
 - script: npm install
   displayName: "Install dependencies"
 
+# Install Playwright browsers
 - script: npx playwright install chromium
   displayName: "Install Chromium browser"
 
+# Publish artifact
 - task: PublishPipelineArtifact@1
   displayName: "Publish automation artifact"
   inputs:
