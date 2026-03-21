@@ -28,12 +28,6 @@ steps:
 - script: npm ci
   displayName: "Install dependencies"
 
-# optional build step if needed
-- script: npm run build
-  displayName: "Build project"
-  continueOnError: true
-
-# publish artifact for CD
 - task: PublishPipelineArtifact@1
   displayName: "Publish automation artifact"
   inputs:
