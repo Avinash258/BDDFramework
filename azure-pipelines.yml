@@ -30,11 +30,8 @@ steps:
 - script: npm install
   displayName: "Install dependencies"
 
-- script: npx playwright install
-  displayName: "Install Playwright browsers"
-
-- script: npm run build
-  displayName: "Build project"
+- script: npx playwright install chromium
+  displayName: "Install Chromium browser"
 
 - task: PublishPipelineArtifact@1
   displayName: "Publish automation artifact"
