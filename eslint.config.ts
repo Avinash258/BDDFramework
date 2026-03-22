@@ -5,7 +5,11 @@ import playwright from 'eslint-plugin-playwright';
 
 export default tseslint.config(
   js.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
+  // Type-checked rules only for TS — avoids errors on root *.js (e.g. db-connection-test.js in CI)
+  ...tseslint.configs.recommendedTypeChecked.map((config) => ({
+    ...config,
+    files: ['**/*.{ts,tsx}'],
+  })),
   {
     ignores: [
       'node_modules/**',
