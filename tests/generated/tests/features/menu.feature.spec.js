@@ -7,10 +7,10 @@ test.describe('Menu actions', () => {
     await Given('I am logged in as "standard_user"', null, { actions }); 
   });
   
-  test('Logout from menu', { tag: ['@regression', '@menu'] }, async ({ When, Then, And, page, pages }) => { 
+  test('Logout from menu', { tag: ['@regression', '@menu'] }, async ({ When, Then, And, pages }) => { 
     await When('I open the menu', null, { pages }); 
     await And('I click logout', null, { pages }); 
-    await Then('I should be on the login page from menu', null, { page }); 
+    await Then('I should be on the login page from menu', null, { pages }); 
   });
 
   test('Reset app state', { tag: ['@regression', '@menu'] }, async ({ Given, When, Then, And, pages }) => { 

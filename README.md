@@ -22,9 +22,11 @@ End-to-end test automation for [Swag Labs](https://www.saucedemo.com/) using:
 ## Install
 
 ```bash
-npm ci
+npm install
 npx playwright install
 ```
+
+For reproducible CI-style installs you can use `npm ci` instead (requires an up-to-date `package-lock.json`).
 
 ---
 
@@ -63,7 +65,8 @@ tests/
   generated/              # Auto-generated tests by bddgen
 
 playwright.config.ts      # Playwright + BDD config + reporters
-eslint.config.js          # ESLint flat config (TS + Playwright rules)
+eslint.config.ts          # ESLint flat config (TS + Playwright rules)
+.gitignore                # Ignores reports, test-results, generated tests, node_modules
 azure-pipelines.yml       # Azure DevOps pipeline
 .github/workflows/ci.yml  # GitHub Actions pipeline
 ```
@@ -125,6 +128,7 @@ This keeps steps short, consistent, and easy to maintain.
 Configured in `playwright.config.ts`:
 
 - **Playwright HTML report** → `playwright-report/`
+- **JUnit (CI)** → `test-results/results.xml`
 - **Allure results** → `allure-results/`
 - **Cucumber HTML report** → `cucumber-report/index.html`
 - **Cucumber JSON report** → `cucumber-report/report.json`
@@ -162,7 +166,7 @@ npx http-server ./cucumber-report -c-1 -a localhost -o index.html
 Workflow: `.github/workflows/ci.yml`
 
 Runs:
-- `npm ci`
+- `npm install`
 - `npx playwright install`
 - `npx bddgen`
 - `npm run lint`
@@ -178,7 +182,36 @@ Uploads artifacts:
 
 Pipeline: `azure-pipelines.yml`
 
-Runs the same steps and publishes the same artifacts as pipeline artifacts.
+Runs:
+
+- `npm install`
+- `npm run lint`
+- `npm run typecheck`
+- `npx playwright install chromium`
+- Publishes a pipeline artifact of the workspace (`playwright-automation`)
+
+---
+
+## Azure Boards (Sprint 1 tickets from tests)
+
+Each executable scenario (including outline examples) is listed in:
+
+- `docs/azure-boards-sprint1-work-items.md`
+
+To create those work items in Azure DevOps ([InnoVisionDA / PlaywrightLearning](https://dev.azure.com/InnoVisionDA/PlaywrightLearning/)):
+
+1. Create a PAT with **Work Items (Read & write)**.
+2. Set `$IterationPath` in `scripts/create-azure-boards-sprint1-items.ps1` to your real Sprint 1 path.
+3. Run:
+
+**Option A — environment variable (recommended for one-off runs):**
+
+```powershell
+$env:AZDO_PAT = '<your-pat>'
+.\scripts\create-azure-boards-sprint1-items.ps1
+```
+
+**Option B — local file (not committed):** copy `.env.example` → `.env.local`, set `AZDO_PAT=...`, then run the script. `.env.local` is listed in `.gitignore` — **never commit PATs**.
 
 ---
 
@@ -186,4 +219,13 @@ Runs the same steps and publishes the same artifacts as pipeline artifacts.
 
 - **Do not edit** `tests/generated/**` directly (always regenerate via `bddgen`).
 - If selectors change on Swag Labs, update the corresponding page object in `src/pages/**`.
+
+### Git ignore (reports & results)
+
+`.gitignore` excludes local run outputs so they are not committed:
+
+- `playwright-report/`, `test-results/`, `blob-report/`
+- `allure-results/`, `allure-report/`, `cucumber-report/`
+- `tests/generated/` (regenerate with `npx bddgen`)
+- `results/` and nested `**/results/`
 

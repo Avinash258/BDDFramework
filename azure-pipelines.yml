@@ -33,6 +33,14 @@ steps:
 - script: npm install
   displayName: "Install dependencies"
 
+# ESLint
+- script: npm run lint
+  displayName: "Lint (ESLint)"
+
+# TypeScript (no emit)
+- script: npm run typecheck
+  displayName: "Typecheck (tsc)"
+
 # Install Playwright browsers
 - script: npx playwright install chromium
   displayName: "Install Chromium browser"

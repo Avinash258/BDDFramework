@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+
+# Playwright / test outputs
+playwright-report/
+test-results/
+blob-report/
+
+# Generic result / output folders (CI, local runs)
+results/
+**/results/
+
+# Allure
+allure-results/
+allure-report/
+
+# Cucumber (playwright-bdd)
+cucumber-report/
+
+# Generated BDD tests (regenerate with: npx bddgen)
+tests/generated/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+
+# Secrets (never commit)
+.env
+.env.local
+.env.*.local

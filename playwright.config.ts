@@ -19,6 +19,7 @@ export default defineConfig({
   reporter: [
     ['list'],
     ['html', { outputFolder: 'playwright-report' }],
+    ['junit', { outputFile: 'test-results/results.xml' }],
     ['allure-playwright', { outputFolder: 'allure-results' }],
     cucumberReporter('html', { outputFile: 'cucumber-report/index.html' }),
     cucumberReporter('json', { outputFile: 'cucumber-report/report.json' }),
